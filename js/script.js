@@ -8,6 +8,7 @@ var k = {
 var vel = 5;
 var posY = parseInt(Math.random() * 334);
 var canShoot = true;
+var endGame = false;
 /*----------Variables----------*/
 
 /*----------Start----------*/
@@ -38,6 +39,7 @@ function start() {
         moveEnemy1();
         moveEnemy2();
         moveFriend();
+        collision();
     }
     /*----------Loop----------*/
 
@@ -140,6 +142,154 @@ function start() {
                 }
             }
     }
-    /*----------Shoot----------*/  
+    /*----------Shoot----------*/
+
+    /*----------Collision----------*/
+    function collision() {
+        var coll1 = ($("#player").collision($("#enemy1")));
+        var coll2 = ($("#player").collision($("#enemy2")));
+        var coll3 = ($("#shoot").collision($("#enemy1")));
+        var coll4 = ($("#shoot").collision($("#enemy2")));
+        var coll5 = ($("#player").collision($("#friend")));
+        var coll6 = ($("#enemy2").collision($("#friend")));
+
+        if (coll1.length > 0) {
+            enemy1X = parseInt($("#enemy1").css("left"));
+            enemy1Y = parseInt($("#enemy1").css("top"));
+            explosion1(enemy1X, enemy1Y);
+
+            posY = parseInt(Math.random() * 334);
+            $("#enemy1").css("left", 694);
+            $("#enemy1").css("top", posY);
+
+        }
+
+        if (coll2.length > 0) {
+            enemy2X = parseInt($("#enemy2").css("left"));
+            enemy2Y = parseInt($("#enemy2").css("top"));
+            explosion2(enemy2X,enemy2Y);
+                    
+            $("#enemy2").remove();
+            enemyRespawn2();
+                
+            }
+            
+        if (coll3.length > 0) {
+            enemy1X = parseInt($("#enemy1").css("left"));
+            enemy1Y = parseInt($("#enemy1").css("top"));
+            explosion1(enemy1X, enemy1Y);
+            $("#shoot").css("left",950);
+            posY = parseInt(Math.random() * 334);
+            $("#enemy1").css("left",694);
+            $("#enemy1").css("top",posY);
+        }
+        
+        if (coll4.length > 0) {
+            enemy2X = parseInt($("#enemy2").css("left"));
+            enemy2Y = parseInt($("#enemy2").css("top"));
+            $("#enemy2").remove();
+            explosion2(enemy2X, enemy2Y);
+            $("#shoot").css("left",950);
+            enemyRespawn2();  
+            }
+
+        if (coll5.length >0) {
+	        friendRespawn();
+            $("#friend").remove();
+        }
+
+        if (coll6.length > 0) {
+            friendX = parseInt($("#friend").css("left"));
+            friendY = parseInt($("#friend").css("top"));
+            explosion3(friendX,friendY);
+            $("#friend").remove();        
+            friendRespawn();     
+        }
+    }  
+    /*----------Collision----------*/  
+    
+    /*----------Explosion----------*/
+    function explosion1(enemy1X, enemy1Y) {
+        $("#background").append("<div id='explosion1'></div>");
+        $("#explosion1").css("background-image", "url(img/explosao.png)");
+        var div = $("#explosion1");
+        div.css("top", enemy1Y);
+        div.css("left", enemy1X);
+        div.animate({width:200, opacity:0}, "slow");   
+        
+        var explosionTime = window.setInterval(removeExplosion, 1000);
+
+            function removeExplosion() {
+                div.remove();
+                window.clearInterval(explosionTime);
+                explosionTime = null;
+            }
+
+    } 
+    
+    function explosion2(enemy2X, enemy2Y) {
+        $("#background").append("<div id='explosion2'></div>");
+        $("#explosion2").css("background-image", "url(img/explosao.png)");
+        var div2 = $("#explosion2");
+        div2.css("top", enemy2Y);
+        div2.css("left", enemy2X);
+        div2.animate({width:200, opacity:0}, "slow");   
+        
+        var explosionTime2 = window.setInterval(removeExplosion2, 1000);
+
+            function removeExplosion2() {
+                div2.remove();
+                window.clearInterval(explosionTime2);
+                explosionTime2 = null;
+            }
+    }
+    
+  
+    /*----------Explosion----------*/  
+    
+    /*----------Respawn Enemy----------*/
+    function enemyRespawn2() {
+        var collisionTime4 = window.setInterval(respawn4, 5000);
+            
+            function respawn4() {
+            window.clearInterval(collisionTime4);
+            collisionTime4 = null;
+                
+                if (endGame == false) {
+                    $("#background").append("<div id=enemy2></div");
+                }
+            }	
+        }	  
+    /*----------Respawn Enemy----------*/  
+    
+    /*----------Respawn Friend----------*/
+    function friendRespawn() {
+        var friendTime = window.setInterval(respawn6, 6000);
+        
+            function respawn6() {
+            window.clearInterval(friendTime);
+            friendTime = null;
+            
+            if (endGame == false) {
+                $("#background").append("<div id='friend' class='ani3'></div>");
+            }  
+        }
+    }  
+    /*----------Respawn Friend----------*/  
+
+    function explosion3(friendX,friendY) {
+        $("#background").append("<div id='explosion3' class='ani4'></div");
+        $("#explosion3").css("top", friendY);
+        $("#explosion3").css("left", friendX);
+        var explosionTime3 = window.setInterval(resetExplosion3, 1000);
+        function resetExplosion3() {
+            $("#explosion3").remove();
+            window.clearInterval(explosionTime3);
+            explosionTime3 = null;       
+        }
+        
+    }
+    
+
 }
 /*----------Start----------*/

@@ -339,9 +339,39 @@ function start() {
 	    }
 
 	    if (currentEnergy == 0) {	
-    		$("#energy").css("background-image", "url(imgs/energia0.png)");
-	    }
+            $("#energy").css("background-image", "url(img/energia0.png)");
+            gameOver();
+        }
+        
     }
     /*----------Energy----------*/  
+
+    /*----------Game Over----------*/  
+    function gameOver() {
+        endGame = true;
+        music.pause();
+        soundGameOver.play();
+
+        window.clearInterval(game.timer);
+        game.timer = null;
+
+        $("#player").remove();
+        $("#enemy1").remove();
+        $("#enemy2").remove();
+        $("#friend").remove();
+
+        $("#background").append("<div id='end'></div>");
+
+        $("#end").html("<h1> Game Over </h1><p>Your SCORE: " + points + "</p>" + "<div id='restart' onClick =restartGame()><h3>F5 To Play Again</h3></div>");
+    } 
+    /*----------Game Over----------*/   
 }
 /*----------Start----------*/
+
+ /*----------Restart----------*/  
+ function restartGame() {
+    soundGameOver.pause();
+    $("#end").remove();
+    start();
+}
+/*----------Restart----------*/ 

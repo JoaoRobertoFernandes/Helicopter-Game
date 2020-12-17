@@ -13,7 +13,17 @@ var points = 0;
 var saves = 0;
 var lost = 0;
 var currentEnergy = 3;
+
+var soundShoot = document.getElementById("soundShoot");
+var soundExplosion = document.getElementById("soundExplosion");
+var music = document.getElementById("music");
+var soundGameOver = document.getElementById("soundGameOver");
+var soundLost = document.getElementById("soundLost");
+var soundRescue = document.getElementById("soundRescue");
 /*----------Variables----------*/
+
+music.addEventListener("ended", function(){ music.currentTime = 0; music.play(); }, false);
+music.play();
 
 /*----------Start----------*/
 function start() {
@@ -126,6 +136,7 @@ function start() {
     /*----------Shoot----------*/
     function shooting() {
         if (canShoot == true) {
+            soundShoot.play();
             canShoot = false;
             topH = parseInt($("#player").css("top"));
             posX = parseInt($("#player").css("left"));
@@ -208,6 +219,7 @@ function start() {
 
         if (coll5.length >0) {
             saves++;
+            soundRescue.play();
 	        friendRespawn();
             $("#friend").remove();
         }
@@ -225,6 +237,7 @@ function start() {
     
     /*----------Explosion----------*/
     function explosion1(enemy1X, enemy1Y) {
+        soundExplosion.play();
         $("#background").append("<div id='explosion1'></div>");
         $("#explosion1").css("background-image", "url(img/explosao.png)");
         var div = $("#explosion1");
@@ -243,6 +256,7 @@ function start() {
     } 
     
     function explosion2(enemy2X, enemy2Y) {
+        soundExplosion.play();
         $("#background").append("<div id='explosion2'></div>");
         $("#explosion2").css("background-image", "url(img/explosao.png)");
         var div2 = $("#explosion2");
@@ -260,6 +274,7 @@ function start() {
     }
     
     function explosion3(friendX,friendY) {
+        soundLost.play();
         $("#background").append("<div id='explosion3' class='ani4'></div");
         $("#explosion3").css("top", friendY);
         $("#explosion3").css("left", friendX);

@@ -87,6 +87,34 @@ body{
 
 /*------------------Container------------------*/
 
+/*---------Score----------*/
+#placar {
+	width: 450px;
+	height: 50px;
+	position: absolute;
+	left: 5px;
+	top: 590px;
+}
+
+h2 {
+	font-family:Titulo;
+	font-size:20px;
+	color:#FFF
+}
+/*---------Score----------*/
+
+/*---------Life----------*/
+#energy {
+	width: 140px;
+	height: 38px;
+	position: absolute;
+	left: 750px;
+	top: 7px;	
+}
+/*---------Life----------*/
+
+
+
 /*------------------Animations------------------*/
 .ani1 {
 	background-image:url(../img/apache.png);

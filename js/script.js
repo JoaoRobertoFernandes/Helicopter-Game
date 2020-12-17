@@ -9,6 +9,10 @@ var vel = 5;
 var posY = parseInt(Math.random() * 334);
 var canShoot = true;
 var endGame = false;
+var points = 0;
+var saves = 0;
+var lost = 0;
+var currentEnergy = 3;
 /*----------Variables----------*/
 
 /*----------Start----------*/
@@ -19,6 +23,8 @@ function start() {
     $("#background").append("<div id='enemy1' class='ani2'></div>");
     $("#background").append("<div id='enemy2' ></div>");    
     $("#background").append("<div id='friend' class='ani3'></div>");
+    $("#background").append("<div id='score'></div>");
+    $("#background").append("<div id='energy'></div>");
 
     /*----------Keypress----------*/
     game.press = [];
@@ -40,6 +46,8 @@ function start() {
         moveEnemy2();
         moveFriend();
         collision();
+        score();
+        energy();
     }
     /*----------Loop----------*/
 
@@ -154,6 +162,7 @@ function start() {
         var coll6 = ($("#enemy2").collision($("#friend")));
 
         if (coll1.length > 0) {
+            currentEnergy--;
             enemy1X = parseInt($("#enemy1").css("left"));
             enemy1Y = parseInt($("#enemy1").css("top"));
             explosion1(enemy1X, enemy1Y);
@@ -165,6 +174,7 @@ function start() {
         }
 
         if (coll2.length > 0) {
+            currentEnergy--;
             enemy2X = parseInt($("#enemy2").css("left"));
             enemy2Y = parseInt($("#enemy2").css("top"));
             explosion2(enemy2X,enemy2Y);
@@ -175,6 +185,8 @@ function start() {
             }
             
         if (coll3.length > 0) {
+            vel = vel + 0.3;
+            points = points + 100;
             enemy1X = parseInt($("#enemy1").css("left"));
             enemy1Y = parseInt($("#enemy1").css("top"));
             explosion1(enemy1X, enemy1Y);
@@ -185,6 +197,7 @@ function start() {
         }
         
         if (coll4.length > 0) {
+            points = points + 50;
             enemy2X = parseInt($("#enemy2").css("left"));
             enemy2Y = parseInt($("#enemy2").css("top"));
             $("#enemy2").remove();
@@ -194,11 +207,13 @@ function start() {
             }
 
         if (coll5.length >0) {
+            saves++;
 	        friendRespawn();
             $("#friend").remove();
         }
 
         if (coll6.length > 0) {
+            lost++;
             friendX = parseInt($("#friend").css("left"));
             friendY = parseInt($("#friend").css("top"));
             explosion3(friendX,friendY);
@@ -244,7 +259,18 @@ function start() {
             }
     }
     
-  
+    function explosion3(friendX,friendY) {
+        $("#background").append("<div id='explosion3' class='ani4'></div");
+        $("#explosion3").css("top", friendY);
+        $("#explosion3").css("left", friendX);
+        var explosionTime3 = window.setInterval(resetExplosion3, 1000);
+        function resetExplosion3() {
+            $("#explosion3").remove();
+            window.clearInterval(explosionTime3);
+            explosionTime3 = null;       
+        }
+        
+    }
     /*----------Explosion----------*/  
     
     /*----------Respawn Enemy----------*/
@@ -276,20 +302,31 @@ function start() {
         }
     }  
     /*----------Respawn Friend----------*/  
-
-    function explosion3(friendX,friendY) {
-        $("#background").append("<div id='explosion3' class='ani4'></div");
-        $("#explosion3").css("top", friendY);
-        $("#explosion3").css("left", friendX);
-        var explosionTime3 = window.setInterval(resetExplosion3, 1000);
-        function resetExplosion3() {
-            $("#explosion3").remove();
-            window.clearInterval(explosionTime3);
-            explosionTime3 = null;       
-        }
-        
-    }
     
+    /*----------Score----------*/  
+    function  score() {
+        $("#score").html("<h2> Points: " + points + " Saves: " + saves + " Lost: " + lost + "</h2>"); 
+    }
+    /*----------Score----------*/
 
+    /*----------Energy----------*/  
+    function energy() {
+        if (currentEnergy == 3) {
+		    $("#energy").css("background-image", "url(img/energia3.png)");
+	    }
+
+	    if (currentEnergy == 2) {
+		    $("#energy").css("background-image", "url(img/energia2.png)");
+	    }
+
+	    if (currentEnergy == 1) {
+		    $("#energy").css("background-image", "url(img/energia1.png)");
+	    }
+
+	    if (currentEnergy == 0) {	
+    		$("#energy").css("background-image", "url(imgs/energia0.png)");
+	    }
+    }
+    /*----------Energy----------*/  
 }
 /*----------Start----------*/

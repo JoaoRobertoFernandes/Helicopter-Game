@@ -5,6 +5,9 @@ var k = {
     s: 83,
     d: 68
 }
+var vel = 5;
+var posY = parseInt(Math.random() * 334);
+var canShoot = true;
 /*----------Variables----------*/
 
 /*----------Start----------*/
@@ -32,6 +35,9 @@ function start() {
     function loop() {
         moveBg();
         movePlayer();
+        moveEnemy1();
+        moveEnemy2();
+        moveFriend();
     }
     /*----------Loop----------*/
 
@@ -67,9 +73,73 @@ function start() {
         }
 
         if (game.press[k.d]) {
-
+            shooting();
         }
     }
-    /*----------Player Movement----------*/  
+    /*----------Player Movement----------*/
+
+    /*----------Enemy Movement----------*/
+    function moveEnemy1() {
+        posX = parseInt($("#enemy1").css("left"));
+        $("#enemy1").css("left", posX - vel);
+        $("#enemy1").css("top", posY);
+
+            if (posX <= 0) {
+                posY = parseInt(Math.random() * 334);
+                $("#enemy1").css("left", 634);
+                $("#enemy1").css("top", posY);
+            }
+    }
+
+    function moveEnemy2() {
+        posX = parseInt($("#enemy2").css("left"));
+        $("#enemy2").css("left", posX - 3);
+
+        if (posX <= 0) {
+            $("#enemy2").css("left", 775);
+        }
+    }
+
+    /*----------Enemy Movement----------*/  
+
+    /*----------Friend Movement----------*/
+    function moveFriend() {
+        posX = parseInt($("#friend").css("left"));
+        $("#friend").css("left", posX + 1);
+
+        if (posX > 906) {
+            $("#friend").css("left", 0);
+        }
+    }
+    /*----------Friend Movement----------*/
+
+    /*----------Shoot----------*/
+    function shooting() {
+        if (canShoot == true) {
+            canShoot = false;
+            topH = parseInt($("#player").css("top"));
+            posX = parseInt($("#player").css("left"));
+            shootX = posX + 190;
+            shootTop = topH + 37;
+            $("#background").append("<div id='shoot' ></div>");
+            $("#shoot").css("top", shootTop);
+            $("#shoot").css("left", shootX);
+            
+            var shootTimer = window.setInterval(execShoot, 30);
+        }
+
+            function execShoot() {
+                posX = parseInt($("#shoot").css("left"));
+                $("#shoot").css("left", posX + 15);
+
+                if (posX > 900) {
+                    window.clearInterval(shootTimer);
+                    shootTimer = null;
+                    $("#shoot").remove();
+                    canShoot = true;
+                }
+            }
+    }
+    /*----------Shoot----------*/  
 }
 /*----------Start----------*/
